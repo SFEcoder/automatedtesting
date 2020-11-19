@@ -95,12 +95,12 @@ public class TestSelection {
         for(String testClassPath:testList){
             scope.addClassFileToScope(ClassLoaderReference.Application,new File(testClassPath));
         }
-        setTest(scope,testClassSet,flag);
+        setTest(scope,testClassSet);
         //将类文件对象加入scope中
         for(String classpath:srcList){
             scope.addClassFileToScope(ClassLoaderReference.Application,new File(classpath));
         }
-        buildGraph(scope,srcGraph,flag);
+        buildGraph(scope,srcGraph);
         Map<String,Set<String>> dot=new HashMap<>();
         //生成Dot文件
         makeDot(srcGraph,dot,flag);
@@ -215,11 +215,10 @@ public class TestSelection {
      * 生成所有测试方法的集合
      * @param scope
      * @param testSet
-     * @param flag
      * @throws ClassHierarchyException
      * @throws CancelException
      */
-    public static  void setTest(AnalysisScope scope,Set<Node> testSet,boolean flag) throws ClassHierarchyException, CancelException {
+    public static  void setTest(AnalysisScope scope,Set<Node> testSet) throws ClassHierarchyException, CancelException {
         // 生成类层次关系对象
         ClassHierarchy cha = ClassHierarchyFactory.makeWithRoot(scope);
         // 生成进入点
@@ -249,9 +248,8 @@ public class TestSelection {
      * 构建节点网络
      * @param scope
      * @param graph
-     * @param flag
      */
-    public static  void buildGraph(AnalysisScope scope,Map<Node,HashSet<Node>> graph,boolean flag) throws ClassHierarchyException, CancelException {
+    public static  void buildGraph(AnalysisScope scope,Map<Node,HashSet<Node>> graph) throws ClassHierarchyException, CancelException {
         // 生成类层次关系对象
         ClassHierarchy cha = ClassHierarchyFactory.makeWithRoot(scope);
         // 生成进入点
