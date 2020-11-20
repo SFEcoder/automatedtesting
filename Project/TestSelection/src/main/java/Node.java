@@ -9,10 +9,13 @@ public class Node {
     private String classInnerName;
     // 方法签名
     private String signature;
+    //是否为测试方法
+    private boolean isTest;
 
-    public Node(String classInnerName,String signature){
+    public Node(String classInnerName,String signature,boolean isTest){
         this.classInnerName = classInnerName;
         this.signature = signature;
+        this.isTest=isTest;
     }
 
     public void setClassInnerName(String classInnerName){
@@ -60,4 +63,11 @@ public class Node {
     }
 
 
+    public boolean isTest() {
+        return isTest;
+    }
+
+    public void setTest(boolean test) {
+        isTest = test;
+    }
 }

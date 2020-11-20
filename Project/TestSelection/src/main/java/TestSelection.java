@@ -200,9 +200,19 @@ public class TestSelection {
                         }
                         queue.add(temp);
                         //判断temp节点是否属于测试方法并且为非初始化方法
-                        if(testClassSet.contains(temp)&&(!temp.getAllName().contains("<init>()V"))){
-                            ans.add(temp.getAllName());
+                        if(flag){
+                            if(testClassSet.contains(temp)&&temp.isTest()){
+                                ans.add(temp.getAllName());
+                            }
+                        }else{
+                            for(Node node1:testClassSet){
+                                //在类级筛选层次上用类名做判断
+                                if(temp.getClassInnerName().equals(node1.getClassInnerName())&&node1.isTest()){
+                                    ans.add(node1.getAllName());
+                                }
+                            }
                         }
+
                     }
                 }
             }
@@ -237,7 +247,8 @@ public class TestSelection {
                     String classInnerName = method.getDeclaringClass().getName().toString();
                     //获取方法签名
                     String signature = method.getSignature();
-                    Node cur = new Node(classInnerName,signature);
+                    //根据方法的注解是否含有Test来判断是否为一个测试方法
+                    Node cur = new Node(classInnerName,signature,node.getMethod().getAnnotations().toString().contains("Test"));
                     testSet.add(cur);
                 }
             }
@@ -267,7 +278,7 @@ public class TestSelection {
                     String classInnerName = method.getDeclaringClass().getName().toString();
                     //获取方法签名
                     String signature = method.getSignature();
-                    Node cur = new Node(classInnerName,signature);
+                    Node cur = new Node(classInnerName,signature,node.getMethod().getAnnotations().toString().contains("Test"));
                     if(!graph.containsKey(cur)){
                         graph.put(cur,new HashSet<Node>());
                     }
@@ -280,7 +291,7 @@ public class TestSelection {
                             if ("Application".equals(tempMethod.getDeclaringClass().getClassLoader().toString())) {
                                 String nextClassInnerName = tempMethod.getDeclaringClass().getName().toString();
                                 String nextSignature = tempMethod.getSignature();
-                                Node follow = new Node(nextClassInnerName, nextSignature);
+                                Node follow = new Node(nextClassInnerName, nextSignature,next.getMethod().getAnnotations().toString().contains("Test"));
                                 graph.get(cur).add(follow);
                             }
                         }
